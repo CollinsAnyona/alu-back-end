@@ -32,32 +32,37 @@ if __name__ == "__main__":
     https://jsonplaceholder.typicode.com/users/{employees_id}
     after getting it from the command line using the sys module
     """
-    employee_id = sys.argv[1]
-    url1 = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    url2 = f"https://jsonplaceholder.typicode.com/users/{employee_id}/"
-    # create a request objects at first using urllib.request.Request()
-    req_object1 = urllib.request.Request(url1, method="GET")
-    req_object2 = urllib.request.Request(url2, method="GET")
-    # fetch the resources using the request objects and the function
-    # urllib.request.urlopen
-    with urllib.request.urlopen(req_object1) as response_object1:
-        response1 = json.load(response_object1)
-    with urllib.request.urlopen(req_object2) as response_object2:
-        response2 = json.load(response_object2)
-    # create an empty list to store completed tasks
+    import requests
+
+def get_emp_todo(emp_id):
+    TODO_URL = f"https://jsonplaceholder.typicode.com/users/{emp_id}/todos"
+    USER_URL = f"https://jsonplaceholder.typicode.com/users/{emp_id}"
+
+    # Get the JSON of TODOS - DONE
+    # Get TOTAL NUMBER of todos - DONE
+    # Get COMPLETED NUMBER of todos - DONE
+    # Get THE NAME of the employee - DONE 
+
+    # GET THE TITLES OF THE COMPLETED TASKS
     completed_tasks = []
-    # iterate through all task to get task with boolean value true
+    # AND PRINT THEM ALL OUT ON STDOUT
     for task in response1:
-        if task['completed'] is not True:
-            continue
-        completed_tasks.append(task)
-    # get length for completed task and all task (complete and incomplete)
-    no_of_comptasks = len(completed_tasks)
-    totalno_of_task = len(response1)
-    # get the employee name
-    employee_name = response2["name"]
-    # display the required format in the docs
-    print(f"Employee {employee_name} is done with tasks({no_of_comptasks}/\
-{totalno_of_task}):")
-    for comp_tasks in completed_tasks:
-        print(f"\t {comp_tasks['title']}")
+	if task [‘completed’] is not True:
+		continue
+ 	completed_tasks.append (task)
+    # EACH TASKS SHOULD BE PRINTED ON A NEW LINE
+    no_of_completed_tasks = len(completed_tasks)
+    total_no_of_tasks = len(response1)
+
+    emp_name = requests.get(USER_URL).json()["name"]
+    emp_todos = requests.get(TODO_URL).json()
+    emp_total_todos = len(emp_todos)
+    emp_completed_todos = 0
+    for todo in emp_todos:
+        if todo["completed"] is True:
+            emp_completed_todos += 1
+    print(f"Employee {emp_name} From total todos of {emp_total_todos}, {emp_completed_todos} tasks have been done")
+
+
+get_emp_todo(3)
+
